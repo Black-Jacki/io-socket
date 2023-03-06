@@ -6,11 +6,10 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  
-  final String title = "Msg Proxy Client";
-  
   const MyApp({Key? key}) : super(key: key);
-  
+
+  final String title = "Msg Proxy Client";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
