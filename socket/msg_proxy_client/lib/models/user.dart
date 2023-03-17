@@ -4,11 +4,11 @@ class User {
   
   final String port;
   
-  final String host;
+  final String hostName;
   
   User({
     required this.address,
     required this.port,
-    required this.host,
+    required this.hostName,
   });
 }

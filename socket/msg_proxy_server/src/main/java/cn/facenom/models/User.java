@@ -2,6 +2,8 @@ package cn.facenom.models;
 
 import lombok.Data;
 
+import java.net.Socket;
+
 /**
  * @author zyh
  * @version 1.0
@@ -9,10 +11,22 @@ import lombok.Data;
  */
 @Data
 public class User {
-    
+
     private String address;
 
-    private String port;
-    
-    private String host;
+    private int port;
+
+    private String hostName;
+
+    private Socket socket;
+
+    public User() {
+        
+    }
+
+    public User(String address, int port, Socket socket) {
+        this.address = address;
+        this.port = port;
+        this.socket = socket;
+    }
 }

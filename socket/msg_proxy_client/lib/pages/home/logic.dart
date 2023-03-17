@@ -9,7 +9,7 @@ List<Message> getMessages(int num) {
     Message msg = Message(
         address: "127.0.0.1",
         port: port,
-        host: "127.0.0.1",
+        hostName: "剑侠客",
         isOwner: isOwner,
         content: "content_$i");
     l.add(msg);

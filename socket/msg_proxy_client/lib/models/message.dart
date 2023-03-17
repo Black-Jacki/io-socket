@@ -4,7 +4,7 @@ class Message {
   
   final String port;
 
-  final String host;
+  final String hostName;
   
   final String content;
   
@@ -13,7 +13,7 @@ class Message {
   Message({
     required this.address, 
     required this.port,
-    required this.host,
+    required this.hostName,
     required this.isOwner,
     required this.content,
   });
