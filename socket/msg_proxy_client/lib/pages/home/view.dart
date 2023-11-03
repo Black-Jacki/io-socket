@@ -16,14 +16,42 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController msgEditController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title),
+        leading: DrawerButton(
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        ),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.more)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
+        ],
       ),
       backgroundColor: const Color(0xffeeeeee),
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              "helle drawer.",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            BackButton(
+              onPressed: () => _scaffoldKey.currentState?.closeDrawer(),
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -31,7 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(10),
               children: [
                 ...widget.messages.map(
-                    (e) => ListItem(content: e.content, isOwner: e.isOwner))
+                  (e) => ListItem(content: e.content, isOwner: e.isOwner),
+                ),
               ],
             ),
           ),
@@ -74,6 +103,16 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: NavigationBar(
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+          NavigationDestination(icon: Icon(Icons.settings), label: "Settings"),
+        ],
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (v) => setState(() {
+          selectedIndex = v;
+        }),
       ),
     );
   }
