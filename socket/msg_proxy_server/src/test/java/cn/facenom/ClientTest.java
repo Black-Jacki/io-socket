@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -22,7 +23,13 @@ public class ClientTest {
     @Test
     public void connectUser1() {
         try {
+            // 随机本地 socket client 端口用法
             Socket socket = new Socket("127.0.0.1", 9000);
+            
+            // 指定本地 socket client 端口用法
+//            Socket socket = new Socket();
+//            socket.bind(new InetSocketAddress("127.0.0.1", 55685));
+//            socket.connect(new InetSocketAddress("127.0.0.1", 9000));
 
             String localAddress = socket.getLocalAddress().getHostAddress();
             int localPort = socket.getLocalPort();
@@ -84,6 +91,7 @@ public class ClientTest {
 
     @Test
     public void connectUser2() {
+        int targetPort = 55685;
         try {
             Socket socket = new Socket("127.0.0.1", 9000);
 
@@ -119,7 +127,7 @@ public class ClientTest {
                 outputStream.write(bytes);
             }
 
-            sendMessage(outputStream, "127.0.0.1", 53049);
+            sendMessage(outputStream, "127.0.0.1", targetPort);
             
         } catch (IOException e) {
             throw new RuntimeException(e);

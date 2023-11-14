@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -86,29 +88,37 @@ public class SocketThread extends Thread {
     }
 
     private void syncClients() {
-        System.out.println("clients: " + clients.toString());
-        Set<String> keys = clients.keySet();
-        for (String key : keys) {
-            User user = clients.get(key);
-            OutputStream outputStream = null;
-            try {
+        OutputStream outputStream = null;
+
+        try {
+            List<String> clientInfos = new ArrayList<>();
+            Set<String> keys = clients.keySet();
+            for (String key : keys) {
+                User user = clients.get(key);
+                String temp = user.getAddress() + ":" + user.getPort() + ":" + user.getHostName();
+                clientInfos.add(temp);
+            }
+            String clientInfosString = String.join("\n", clientInfos);
+            System.out.println("clients: " + clientInfosString);
+            byte[] clientInfosBytes = clientInfosString.getBytes();
+            byte[] infoBytes = new byte[1024];
+            infoBytes[0] = '0';
+            infoBytes[1] = '4';
+            byte[] ipPortBytes = address2Bytes("0.0.0.0", source.getSocket().getLocalPort());
+            System.arraycopy(ipPortBytes, 0, infoBytes, 2, 6);
+            System.arraycopy(len2bytes(clientInfosBytes.length), 0, infoBytes, 8, 2);
+            System.arraycopy(clientInfosBytes, 0, infoBytes, 10, clientInfosBytes.length);
+
+            for (String key : keys) {
+                User user = clients.get(key);
                 if (!user.getSocket().isClosed()) {
                     outputStream = user.getSocket().getOutputStream();
-                    byte[] clientInfosBytes = clients.toString().getBytes();
-                    byte[] infoBytes = new byte[1024];
-                    infoBytes[0] = '0';
-                    infoBytes[1] = '4';
-                    byte[] ipPortBytes = address2Bytes("0.0.0.0", source.getSocket().getLocalPort());
-                    System.arraycopy(ipPortBytes, 0, infoBytes, 2, 6);
-                    System.arraycopy(len2bytes(clientInfosBytes.length), 0, infoBytes, 8, 2);
-                    System.arraycopy(clientInfosBytes, 0, infoBytes, 10, clientInfosBytes.length);
-                    
                     outputStream.write(infoBytes);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                close(outputStream);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            close(outputStream);
         }
     }
 
