@@ -7,13 +7,13 @@ package cn.facenom;
  */
 public class Constants {
 
-    public static final String TYPE_LOGIN = "0";
+    public static final String TYPE_LOGIN = "00";
 
-    public static final String TYPE_LOGOUT = "1";
+    public static final String TYPE_LOGOUT = "01";
 
-    public static final String TYPE_CONNECT = "2";
-
-    public static final String TYPE_DISCONNECT = "3";
-
-    public static final String TYPE_SEND = "4";
+    public static final String TYPE_SEND = "02";
+    
+    public static final String TYPE_SEND_ERROR = "03";
+    
+    public static final String TYPE_SYNC_INFO = "04";
 }
